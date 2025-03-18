@@ -1,4 +1,4 @@
-# ![Lunaris Logo](public/logo.svg)
+<img src="./public/logo.svg" alt="Lunaris Logo" width="200" />
 
 # Welcome to the Lunaris Project
 
