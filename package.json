@@ -8,12 +8,16 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"test": "jest"
+		"test": "jest",
+    "postinstall": "prisma generate"
+
 	},
 	"dependencies": {
+		"@prisma/client": "^6.5.0",
 		"dotenv": "^16.4.7",
 		"next": "15.2.3",
 		"pg": "^8.14.1",
+		"prisma": "^6.5.0",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"sass": "^1.86.0"
