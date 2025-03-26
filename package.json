@@ -9,12 +9,15 @@
 		"start": "next start",
 		"lint": "next lint",
 		"test": "jest",
-    "postinstall": "prisma generate"
-
+		"postinstall": "prisma generate"
 	},
 	"dependencies": {
+		"@apollo/server": "^4.11.3",
+		"@as-integrations/next": "^3.2.0",
+		"graphql": "^16.10.0",
 		"@prisma/client": "^6.5.0",
 		"dotenv": "^16.4.7",
+		"micro": "^10.0.1",
 		"next": "15.2.3",
 		"pg": "^8.14.1",
 		"prisma": "^6.5.0",
