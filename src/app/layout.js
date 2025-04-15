@@ -1,5 +1,5 @@
 import "../globals.scss";
-
+import SessionProviderWrapper from "./SessionProviderWrapper";
 export const metadata = {
 	title: "Lunaris",
 	icons: {
@@ -9,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<SessionProviderWrapper>
+				<body>{children}</body>
+			</SessionProviderWrapper>
 		</html>
 	);
 }

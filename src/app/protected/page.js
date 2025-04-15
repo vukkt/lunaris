@@ -1,13 +1,12 @@
-import { getServerSession } from "next-auth/next";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/app/lib/auth";
+"use client";
+import { useSession } from "next-auth/react";
 
-export default async function ProtectedPage() {
-	const session = await getServerSession(authOptions);
-	if (!session) {
-		// Redirect to the custom sign in page
-		redirect("/auth/signin");
-	}
+export default function ProtectedPage() {
+	const { data: session, status } = useSession();
+
+	if (status === "loading") return <p>Loading...</p>;
+	if (!session) return <p>You must be signed in to view this page.</p>;
+
 	return (
 		<div>
 			<h1>Protected Page</h1>
