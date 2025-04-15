@@ -2,35 +2,62 @@ import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import prisma from "../../lib/prisma";
 
-// GraphQL Schema Definition
+// Define your GraphQL schema as a plain string
 const typeDefs = `
-  # Basic type for our dummy model
+  scalar DateTime
+
+  enum UserRole {
+    USER
+    ADMIN
+  }
+
+  type User {
+    id: Int!
+    email: String!
+    name: String
+    role: UserRole!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    isActive: Boolean!
+    lastLogin: DateTime
+    passwordResetToken: String
+    resetTokenExpiresAt: DateTime
+  }
+
   type Dummy {
     id: Int!
   }
 
-  # Query definitions
   type Query {
+    users: [User!]!
     allDummies: [Dummy!]!
   }
 
-  # Mutation definitions
   type Mutation {
+    createUser(email: String!, password: String!, name: String): User!
     createDummy: Dummy!
   }
 `;
 
-// Resolvers for GraphQL operations
+// Define your resolvers for GraphQL operations
 const resolvers = {
 	Query: {
-		// Retrieve all Dummy records using Prisma
+		users: async () => await prisma.user.findMany(),
 		allDummies: async () => await prisma.dummy.findMany(),
 	},
 	Mutation: {
-		// Create a new Dummy record
+		createUser: async (_parent, args) => {
+			// IMPORTANT: In production, hash the password before storing!
+			return await prisma.user.create({
+				data: {
+					email: args.email,
+					password: args.password,
+					name: args.name,
+				},
+			});
+		},
 		createDummy: async () => {
-			const newDummy = await prisma.dummy.create({ data: {} });
-			return newDummy;
+			return await prisma.dummy.create({ data: {} });
 		},
 	},
 };
@@ -41,7 +68,7 @@ const server = new ApolloServer({
 	resolvers,
 });
 
-// Create the handler
+// Create the Next.js API handler for Apollo Server
 const handler = startServerAndCreateNextHandler(server, {
 	context: async (req, res) => ({
 		prisma,
@@ -50,7 +77,7 @@ const handler = startServerAndCreateNextHandler(server, {
 	}),
 });
 
-// Export named methods for different HTTP methods
+// Export HTTP method handlers for Next.js API route
 export async function GET(request) {
 	return handler(request);
 }
